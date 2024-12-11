@@ -1,0 +1,24 @@
+{
+    "name": "mmm-snoweffect",
+    "version": "1.0.0",
+    "description": "A MagicMirror module that adds falling snow effects with optional festive characters",
+    "main": "MMM-SnowEffect.js",
+    "keywords": [
+        "magicmirror",
+        "snow",
+        "effect",
+        "christmas",
+        "winter"
+    ],
+    "author": "Christian Gillinger",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/cgillinger/MMM-SnowEffect.git"
+    },
+    "bugs": {
+        "url": "https://github.com/cgillinger/MMM-SnowEffect/issues"
+    },
+    "homepage": "https://github.com/cgillinger/MMM-SnowEffect#readme",
+    "dependencies": {}
+}

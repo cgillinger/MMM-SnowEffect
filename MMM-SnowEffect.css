@@ -1,0 +1,52 @@
+/* Magic Mirror
+ * Module: MMM-SnowEffect
+ * By Christian Gillinger
+ * MIT Licensed.
+ */
+
+.snow-effect-wrapper {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+    z-index: 99999999 !important;
+}
+
+.snow-effect-flake {
+    position: absolute !important;
+    color: white;
+    opacity: 0.8;
+    pointer-events: none !important;
+    z-index: 99999999 !important;
+}
+
+.snow-effect-flake.blue {
+    color: #BDE3FF !important;
+}
+
+.snow-effect-flake.sparkle {
+    transition: text-shadow 0.2s ease-in-out;
+}
+
+@keyframes snow-effect-fall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+    }
+    100% {
+        transform: translateY(200vh) rotate(360deg);
+    }
+}
+
+@keyframes snow-effect-sparkle {
+    0%, 100% {
+        opacity: 0.8;
+        text-shadow: none;
+    }
+    50% {
+        opacity: 1;
+        text-shadow: 0 0 8px rgba(255,255,255,0.8);
+    }
+}

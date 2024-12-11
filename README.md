@@ -3,7 +3,12 @@
 A MagicMirror² module that adds gentle falling snow to your mirror. Perfect for creating a winter atmosphere! The module automatically adapts to your device's capabilities through two performance modes.
 
 ## Effect Preview
-[Screenshot coming soon]
+
+### Light Mode
+![Light Mode](light.png)
+
+### Rich Mode
+![Rich Mode](rich.png)
 
 ## Key Features
 - Beautiful falling snowflakes (white and light blue mix)

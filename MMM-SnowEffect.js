@@ -8,7 +8,7 @@ Module.register("MMM-SnowEffect", {
     // Default configuration
     defaults: {
         snow: true,           // Enable/disable snow effect
-        performance: 'rich', // 'light' for Raspberry Pi and low-power devices, 'rich' for powerful devices
+        performance: 'light', // 'light' for Raspberry Pi and low-power devices, 'rich' for powerful devices
         flakeCount: 25,       // Default count optimized for Raspberry Pi
         speed: 1.0,          // Speed multiplier (1 = normal speed)
         minSize: 0.8,        // Minimum size of snowflakes

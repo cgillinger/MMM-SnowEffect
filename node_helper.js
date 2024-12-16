@@ -1,4 +1,4 @@
-/* Magic Mirror
+/* MagicMirror²
  * Node Helper: MMM-SnowEffect
  * By Christian Gillinger
  * MIT Licensed.

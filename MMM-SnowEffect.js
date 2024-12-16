@@ -1,34 +1,36 @@
 /* Magic Mirror
  * Module: MMM-SnowEffect
+ * 
  * By Christian Gillinger
  * MIT Licensed.
+ * 
+ * v2.0.1
+ * 
+ * Changelog:
+ * v2.0.1 (2024-12-16)
+ * - Removed performance presets system
+ * - Simplified configuration with direct values
+ * - Updated validation logic
+ * 
+ * v2.0.0 (2024-12-16)
+ * - Moved all configuration to config.js
+ * - Added comprehensive validation
+ * - Improved error handling
+ * 
+ * v1.0.0 (2024-12-01)
+ * - Initial release
  */
 
 Module.register("MMM-SnowEffect", {
-    // Default configuration
+    // Default configuration - all can be overridden in config.js
     defaults: {
         snow: true,           // Enable/disable snow effect
-        performance: 'light', // 'light' for Raspberry Pi and low-power devices, 'rich' for powerful devices
-        flakeCount: 25,       // Default count optimized for Raspberry Pi
+        flakeCount: 25,       // Default count for light performance
         speed: 1.0,          // Speed multiplier (1 = normal speed)
-        minSize: 0.8,        // Minimum size of snowflakes
-        maxSize: 1.5,        // Maximum size of snowflakes
-    },
-
-    // Performance presets
-    performancePresets: {
-        light: {
-            flakeCount: 25,
-            characters: ['*', '+'],     // Simple ASCII characters for better performance
-            sparkleEnabled: false,      // Disable sparkle effect for performance
-            size: {min: 0.8, max: 1.5}  // Smaller size range for performance
-        },
-        rich: {
-            flakeCount: 50,
-            characters: ['❄', '❆'],     // Unicode snowflakes for better visuals
-            sparkleEnabled: true,       // Enable sparkle effect
-            size: {min: 1.0, max: 2.0}  // Larger size range for better visuals
-        }
+        minSize: 0.8,        // Default minimum size
+        maxSize: 1.5,        // Default maximum size
+        characters: ['*', '+'], // Default characters (light mode style)
+        sparkleEnabled: false  // Sparkle effect disabled by default
     },
 
     // Initialize the module
@@ -40,14 +42,36 @@ Module.register("MMM-SnowEffect", {
         this.retryCount = 0;
         this.maxRetries = 5;
 
-        // Apply performance preset
-        const preset = this.performancePresets[this.config.performance] || this.performancePresets.light;
-        this.activePreset = preset;
+        // Apply configuration logic
+        this.applyConfigurationLogic();
+    },
 
-        // Override flakeCount if user specified it
-        if (this.config.flakeCount === this.defaults.flakeCount) {
-            this.config.flakeCount = preset.flakeCount;
+    // Apply and validate all configuration settings
+    applyConfigurationLogic: function() {
+        // Validate numeric values
+        this.config.flakeCount = Math.max(1, Math.min(100, this.config.flakeCount));
+        this.config.speed = Math.max(0.1, Math.min(5.0, this.config.speed));
+        
+        // Validate size values
+        this.config.minSize = Math.max(0.1, Math.min(5.0, this.config.minSize));
+        this.config.maxSize = Math.max(0.1, Math.min(5.0, this.config.maxSize));
+        
+        // Ensure minSize is always smaller than maxSize
+        if (this.config.minSize >= this.config.maxSize) {
+            const temp = this.config.minSize;
+            this.config.minSize = Math.min(temp, this.config.maxSize);
+            this.config.maxSize = Math.max(temp, this.config.maxSize);
         }
+
+        // Ensure we have valid characters
+        if (!Array.isArray(this.config.characters) || this.config.characters.length === 0) {
+            Log.warn("Invalid characters configuration, using default");
+            this.config.characters = ['*', '+'];
+        }
+
+        // Validate boolean values
+        this.config.snow = !!this.config.snow;
+        this.config.sparkleEnabled = !!this.config.sparkleEnabled;
     },
 
     // Cleanup on module stop
@@ -91,9 +115,9 @@ Module.register("MMM-SnowEffect", {
         }
     },
 
+    // Create snowflake elements
     createSnowflakes: function(wrapper) {
         const toCreate = this.config.flakeCount;
-        const preset = this.activePreset;
         
         for (let i = 0; i < toCreate; i++) {
             const snowflake = document.createElement("div");
@@ -104,24 +128,24 @@ Module.register("MMM-SnowEffect", {
                 snowflake.classList.add("blue");
             }
             
-            // Use preset values for sizing
-            const size = preset.size.min + (Math.random() * (preset.size.max - preset.size.min));
+            // Calculate size and position
+            const size = this.config.minSize + (Math.random() * (this.config.maxSize - this.config.minSize));
             const left = Math.random() * 98 + 1;
             const initialY = -(Math.random() * 100);
             const animationDuration = (8 + Math.random() * 4) / this.config.speed;
             
-            // Use preset characters
-            const flakeType = preset.characters[Math.floor(Math.random() * preset.characters.length)];
+            // Select random character from configured set
+            const flakeType = this.config.characters[Math.floor(Math.random() * this.config.characters.length)];
 
+            // Apply styles
             snowflake.style.left = left + '%';
             snowflake.style.top = initialY + '%';
             snowflake.style.fontSize = size + 'rem';
             
-            // Base animation
+            // Set up animations
             let animation = `snow-effect-fall ${animationDuration}s linear infinite`;
             
-            // Add sparkle if enabled in preset
-            if (preset.sparkleEnabled) {
+            if (this.config.sparkleEnabled) {
                 const sparkleDelay = Math.random() * 2;
                 snowflake.classList.add('sparkle');
                 animation += `, snow-effect-sparkle ${1.5 + Math.random()}s ease-in-out ${sparkleDelay}s infinite`;

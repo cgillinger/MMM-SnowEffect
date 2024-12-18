@@ -159,7 +159,7 @@ Module.register("MMM-SnowEffect", {
     },
 
     // Handle notifications
-    notificationReceived: function(notification, payload, sender) {
+    notificationReceived: function(notification) {
         if (notification === "MODULE_DOM_CREATED") {
             this.initTimer = setInterval(() => {
                 const wrapper = document.getElementById("snow-effect-container");

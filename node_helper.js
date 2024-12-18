@@ -11,7 +11,7 @@ module.exports = NodeHelper.create({
         console.log("Starting node helper for: " + this.name);
     },
     
-    socketNotificationReceived: function(notification, payload) {
+    socketNotificationReceived: function(notification) {
         // Currently not used, but included for future expansion
     }
 });
